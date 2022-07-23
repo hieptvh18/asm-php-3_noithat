@@ -1,0 +1,1 @@
+<h1>LAYOUT FOOTER</h1>
