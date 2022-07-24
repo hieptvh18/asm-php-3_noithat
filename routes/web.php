@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Client\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,4 +26,9 @@ Route::prefix('admin')->name('admin.')->group(function(){
     Route::resource('category', CategoryController::class)->only([
         'index','destroy','update','store'
     ]);
+});
+
+Route::name('client.')->group(function(){
+    Route::get('/',[HomeController::class,'index']);
+    Route::get('home',[HomeController::class,'index'])->name('home');
 });

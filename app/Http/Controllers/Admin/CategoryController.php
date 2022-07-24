@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index(Request $rq)
     {
         //
-        $categories  = Category::paginate();
+        $categories  = Category::paginate(15);
         $category = '';
 
         if($rq->id){
@@ -48,7 +48,6 @@ class CategoryController extends Controller
         if($request->validate([
             'required|min:3|max:255'
         ]));
-        
         return redirect()->back()->with('msg-suc','Create success category');
     }
 

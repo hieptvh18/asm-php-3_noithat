@@ -1,4 +1,4 @@
-@extends('layout.master')
+@extends('layout.admin.master')
 
 @section('title', 'Categories manage')
 
@@ -46,17 +46,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($categories as $category)
+            @foreach ($categories as $categoryItem)
                 <tr>
-                    <td>{{ $category->id }}</td>
-                    <td>{{ $category->name }}</td>
-                    <td>{{ $category->created_at }}</td>
-                    <td>{{ $category->updated_at }}</td>
+                    <td>{{ $categoryItem->id }}</td>
+                    <td>{{ $categoryItem->name }}</td>
+                    <td>{{ $categoryItem->created_at }}</td>
+                    <td>{{ $categoryItem->updated_at }}</td>
                     <td>
-                        <a href="{{ route('admin.category.index') }}?id={{ $category->id }}">
+                        <a href="{{ route('admin.category.index') }}?id={{ $categoryItem->id }}">
                             <button class='btn btn-warning'>Edit</button>
                         </a>
-                        <form id="form-delete" action="{{ route('admin.category.destroy', $category->id) }}"
+                        <form id="form-delete" action="{{ route('admin.category.destroy', $categoryItem->id) }}"
                             method="post">
                             @csrf
                             @method('DELETE')
