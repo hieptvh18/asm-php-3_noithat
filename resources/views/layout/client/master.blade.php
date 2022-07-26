@@ -68,11 +68,11 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li class="active"><a href="index.html">Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="product-details.html">Product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
+                    <li class="active"><a href="{{route('client.home')}}">Home</a></li>
+                    <li><a href="{{route('client.shop')}}">Shop</a></li>
+                    <li><a href="{{route('client.cart')}}">Cart</a></li>
+                    <li><a href="{{route('client.checkout')}}">Checkout</a></li>
+                    <li><a href="{{route('client.contact')}}">Contact</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -82,11 +82,21 @@
             </div>
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
-                <a href="cart.html" class="cart-nav"><img src="{{ asset('client/img/core-img/cart.png') }}"
+                <a href="{{route('client.cart')}}" class="cart-nav"><img src="{{ asset('client/img/core-img/cart.png') }}"
                         alt=""> Cart
                     <span>(0)</span></a>
-                <a href="#" class="fav-nav"><img src="{{ asset('client/img/core-img/favorites.png') }}"
-                        alt=""> Favourite</a>
+
+                    {{-- acc --}}
+                    @if (Auth::check())
+                    <a href="" class="fav-nav"><img src="{{ asset('client/img/core-img/favorites.png') }}"
+                        alt=""> Account</a>
+                    @else
+
+                    <a href="{{route('login')}}" class="fav-nav"><img src="{{ asset('client/img/core-img/favorites.png') }}"
+                        alt=""> Sign-in/Sign-up</a>
+                    @endif
+
+                
                 <a href="#" class="search-nav"><img src="{{ asset('client/img/core-img/search.png') }}"
                         alt=""> Search</a>
             </div>
@@ -103,7 +113,7 @@
         <!-- ##### Main Content Wrapper End ##### -->
 
         <!-- ##### Newsletter Area Start ##### -->
-        <section class="newsletter-area section-padding-100-0">
+        <section class="newsletter-area section-padding-100-0" style="width: 100%;">
             <div class="container">
                 <div class="row align-items-center">
                     <!-- Newsletter Text -->
@@ -168,19 +178,10 @@
                                 <div class="collapse navbar-collapse" id="footerNavContent">
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item active">
-                                            <a class="nav-link" href="index.html">Home</a>
+                                            <a class="nav-link" href="{{route('client.home')}}">Home</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="shop.html">Shop</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="product-details.html">Product</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="cart.html">Cart</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="checkout.html">Checkout</a>
+                                            <a class="nav-link" href="{{route('client.shop')}}">Shop</a>
                                         </li>
                                     </ul>
                                 </div>
