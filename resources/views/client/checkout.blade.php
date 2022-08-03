@@ -15,30 +15,13 @@
 
                     <form action="#" method="post">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <input type="text" class="form-control" id="first_name" value="" placeholder="First Name" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <input type="text" class="form-control" id="last_name" value="" placeholder="Last Name" required>
-                            </div>
                             <div class="col-12 mb-3">
-                                <input type="text" class="form-control" id="company" placeholder="Company Name" value="">
+                                <input type="text" class="form-control" id="company" placeholder="Full name" value="">
                             </div>
                             <div class="col-12 mb-3">
                                 <input type="email" class="form-control" id="email" placeholder="Email" value="">
                             </div>
-                            <div class="col-12 mb-3">
-                                <select class="w-100" id="country">
-                                <option value="usa">United States</option>
-                                <option value="uk">United Kingdom</option>
-                                <option value="ger">Germany</option>
-                                <option value="fra">France</option>
-                                <option value="ind">India</option>
-                                <option value="aus">Australia</option>
-                                <option value="bra">Brazil</option>
-                                <option value="cana">Canada</option>
-                            </select>
-                            </div>
+                           
                             <div class="col-12 mb-3">
                                 <input type="text" class="form-control mb-3" id="street_address" placeholder="Address" value="">
                             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -16,14 +17,23 @@ class CategoryController extends Controller
     public function index(Request $rq)
     {
         //
-        $categories  = Category::paginate(15);
+        $categories  = Category::select('*')
+            ->with('child', 'parent');
         $category = '';
+        $keySearch = '';
 
-        if($rq->id){
+        if ($rq->id) {
             $category = Category::find($rq->id);
         }
 
-        return view('admin/categories/index',compact('categories','category'));
+        if ($rq->key && $rq->key != '') {
+            $categories = $categories->where('categories.name', 'like', '%' . $rq->key . '%');
+            $keySearch = 'Result search: ' . $rq->key;
+        }
+
+        $categories = $categories->paginate(15);
+
+        return view('admin/categories/index', compact('categories', 'category', 'keySearch'));
     }
 
     /**
@@ -33,7 +43,12 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::select('categories.id', 'categories.name', 'parent_id')
+            ->get()->toArray();
+
+        $categoryArray = $this->getChildCategories($categories);
+
+        return view('admin/categories/add', compact('categoryArray'));
     }
 
     /**
@@ -45,10 +60,21 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
-        if($request->validate([
-            'required|min:3|max:255'
+        if ($request->validate([
+            'name' => 'required|min:3|max:255',
+            'file' => 'image|nullable|mimes:png,jpg,jpeg'
         ]));
-        return redirect()->back()->with('msg-suc','Create success category');
+
+        $category = new Category();
+        $category->fill($request->all());
+
+        if ($request->hasFile('image')) {
+            $category->image = $this->saveFile($request->image, 'images/categories', 'cate');
+        }
+
+        $category->save();
+
+        return redirect()->back()->with('msg-suc', 'Create success category');
     }
 
     /**
@@ -70,7 +96,17 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        if ($category) {
+
+            $categories = Category::all()
+                ->toArray();
+            $categoryArray = $this->getChildCategories($categories);
+
+            return view('admin.categories.edit', compact('category', 'categoryArray'));
+        }
+
+        return redirect()->back()->with('msg-er', 'Cannot find category!');
     }
 
     /**
@@ -83,7 +119,21 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
-        dd($request->all());
+        if ($request->validate([
+            'name' => 'required|min:3|max:255',
+            'file' => 'image|nullable|mimes:png,jpg,jpeg'
+        ]));
+
+        $category = Category::find($id);
+        $category->fill($request->all());
+
+        if ($request->hasFile('image')) {
+            $category->image = $this->saveFile($request->image, 'images/categories', 'cate');
+        }
+
+        $category->save();
+
+        return redirect()->back()->with('msg-suc', 'Update success category');
     }
 
     /**
@@ -96,6 +146,37 @@ class CategoryController extends Controller
     {
 
         Category::destroy($id);
-        return redirect()->back()->with('msg-suc','Delete success!');
+        return redirect()->back()->with('msg-suc', 'Delete success!');
+    }
+
+    // get tree category
+    public function getChildCategories(&$listData, $parentId = 0, $level = 0)
+    {
+        // default truyen $parentId = null vi no la cap 0;
+        // note $parentID = sub_categories_id
+        $arr = array();
+        foreach ($listData as $key => $val) {
+            // logic: find all parent -> find child of child ==> continue
+            // level se la so cap bac de co the dung str_repeat lap
+            $val['level'] = $level;
+            if ($val['parent_id'] == $parentId) {
+                $arr[] = $val;
+                
+                // callback
+                $menuChild = $this->getChildCategories($listData, $val['id'], $level + 1);
+                $arr = array_merge($arr, $menuChild);
+            }
+        }
+        return $arr;
+    }
+
+    // save file
+    public function saveFile($file, $folder = 'public', $prefixName = '')
+    {
+
+        $fileName = uniqid() . '.' . $file->extension();
+        $fileName = $prefixName ? $prefixName . '_' . $fileName : $fileName;
+
+        return $file->storeAs($folder, $fileName);
     }
 }

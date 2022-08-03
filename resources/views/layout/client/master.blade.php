@@ -17,6 +17,7 @@
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="{{ asset('client/css/core-style.css') }}">
     <link rel="stylesheet" href="{{ asset('client/css/style.css') }}">
+    @yield('style-css')
 
 </head>
 
@@ -48,7 +49,7 @@
         <div class="mobile-nav">
             <!-- Navbar Brand -->
             <div class="amado-navbar-brand">
-                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                <a href="{{route('client.home')}}"><img src="img/core-img/logo.png" alt=""></a>
             </div>
             <!-- Navbar Toggler -->
             <div class="amado-navbar-toggler">
@@ -90,6 +91,14 @@
                     @if (Auth::check())
                     <a href="" class="fav-nav"><img src="{{ asset('client/img/core-img/favorites.png') }}"
                         alt=""> Account</a>
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            <button onclick="
+                                if(!confirm('Logout?')){
+                                    event.preventDefault()
+                                }
+                            " type="submit">Logout</button>
+                        </form>
                     @else
 
                     <a href="{{route('login')}}" class="fav-nav"><img src="{{ asset('client/img/core-img/favorites.png') }}"
